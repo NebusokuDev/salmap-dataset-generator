@@ -1,20 +1,31 @@
 import '@mantine/core/styles.css';
 
 import {MantineProvider} from '@mantine/core';
-import {Contact, Create, Home} from "./pages.tsx";
+import {Home} from "./pages/Home.tsx";
+
 import {Route, Routes} from "react-router-dom";
+import {ReactElement} from "react";
+
+type route = {
+  path: string;
+  element: ReactElement
+}
+
+const routing: route[] = [{
+  path: "/",
+  element: <Home/>
+}]
 
 export default function App() {
   return (
     <>
       <MantineProvider defaultColorScheme="dark">
         <Routes>
-          <Route path="/" element={<Home/>}/>
-          <Route path="/contact" element={<Contact/>}/>
-          <Route path="/create" element={<Create/>}/>
+          {
+            routing.map((route) => <Route path={route.path} element={route.element}/>)
+          }
         </Routes>
       </MantineProvider>
     </>
-  )
-    ;
+  );
 }
