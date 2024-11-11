@@ -1,14 +1,32 @@
-import {Container} from "@mantine/core";
-import {MouseStoker, MouseStokerCursor, useMousePosition} from "../components/BubbleView.tsx";
+import {Container, Slider} from "@mantine/core";
+import {BubbleView} from "../components/BubbleView.tsx";
+import {useState} from "react";
 
 function Home() {
-  const position = useMousePosition()
+  const [blur, setBlur] = useState(40);
+  const [x, setX] = useState(0);
+  const [y, setY] = useState(0);
+  const [items, setItems] = useState([]);
+
   return (
-    <Container>
-      <MouseStoker x={position.x} y={position.y}>
-        <MouseStokerCursor/>
-      </MouseStoker>
-      <h1>Home</h1>
+    <Container p={50}>
+      <p>pos x: {x}, pos y: {y}</p>
+      <BubbleView
+        onImageClick={(coordinates) => {
+          setX(coordinates.x);
+          setY(coordinates.y);
+          // setItems(prev => [...prev, coordinates])
+        }}
+        blurAmount={blur}
+        imageSrc="/img/mayu.png"/>
+      <Slider
+        onChange={setBlur}
+        color="blue"
+        value={blur}
+        min={20}
+        max={100}
+      />
+      {/*{items.map((item) => ({item}))}*/}
     </Container>
   );
 }
