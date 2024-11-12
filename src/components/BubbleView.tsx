@@ -35,22 +35,34 @@ function BubbleView(props: BubbleViewProps) {
 
       context.filter = `blur(${props.blurAmount}px)`;
       context.drawImage(image, 0, 0, image.width, image.height);
+
+      canvas.addEventListener("click", (e)=> handleClick(e, context, image));
+
+      return () => {
+        canvas.removeEventListener("click", (e) => handleClick(e, context, image))
+      }
     }
   }, [props]);
 
-  const handleClick = (event: React.MouseEvent<HTMLCanvasElement>) => {
+  const handleClick = (
+    event: React.MouseEvent<HTMLCanvasElement>,
+    context: CanvasRenderingContext2D,
+    image: HTMLImageElement) => {
     if (canvasRef.current) {
       // divの位置とサイズを取得
       const rect = canvasRef.current.getBoundingClientRect();
 
       // 左下を(0, 0)とする座標系で位置を計算
-      const x = (event.clientX - rect.left) / rect.width;
-      const y = (rect.bottom - event.clientY)/rect.height;
+      const x = event.clientX - rect.left;
+      const y = rect.bottom - event.clientY;
+
+      const u = x / rect.width;
+      const v = y / rect.height;
       props.onImageClick?.({x, y});
     }
   };
 
-  return <canvas onClick={handleClick} style={{width: "100%", objectFit: "contain"}} ref={canvasRef}/>;
+  return <canvas style={{width: "100%", objectFit: "contain"}} ref={canvasRef}/>;
 }
 
 export {BubbleView}
